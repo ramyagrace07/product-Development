@@ -1,0 +1,47 @@
+server:
+  port: 8091
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    compatibility-verifier:
+      enabled: false
+    gateway:
+      routes:
+        - id: review-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/review-service/**
+          filters:
+            - RewritePath=/review-service(?<segment>/?.*), $\{segment}
+        - id: productservice
+          uri: http://localhost:8111
+          predicates:
+            - Path=/product-service/**
+          filters:
+            - RewritePath=/product-service(?<segment>/?.*), $\{segment}
+        - id: paymentservice
+          uri: http://localhost:8098
+          predicates:
+            - Path=/payment-service/**
+          filters:
+            - RewritePath=/payment-service(?<segment>/?.*), $\{segment}
+        - id: orderservice
+          uri: http://localhost:8086
+          predicates:
+            - Path=/order-service/**
+          filters:
+            - RewritePath=/order-service(?<segment>/?.*), $\{segment}
+        - id: authenticationservice
+          uri: http://localhost:8080
+          predicates:
+            - Path=/authentication-service/**
+          filters:
+            - RewritePath=/authentication-service(?<segment>/?.*), $\{segment}
+        - id: webapp
+          uri: http://localhost:4200
+          predicates:
+            - Path=/webapp/**
+          filters:
+            - RewritePath=/webapp(?<segment>/?.*), $\{segment}
+
